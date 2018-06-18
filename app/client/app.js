@@ -1,8 +1,7 @@
 global.startApp = function(container) {
     // console.log("Here is the container:", container);
-    var box = document.getElementsByClassName('cell');
     let diamondArr = [];
-    let score = 64;
+    let score = 56;
     let numberArr = [];
     let foundDiamonds = [];
 
@@ -10,6 +9,9 @@ global.startApp = function(container) {
         numberArr.push(i);
     }
 
+    var box = document.getElementsByClassName('cell');
+    
+    //adding click event on boxes
     for (var i = 0; i < box.length; i++) {
         box[i].addEventListener('click', flipSide);
         // box[i].classList.add('unknown');
@@ -17,7 +19,7 @@ global.startApp = function(container) {
 
     getDiamondArray();
 
-
+    // setting diamond position on 8 random squares.
     function getDiamondArray() {
         var totalDiamond = 8;
 
@@ -25,32 +27,39 @@ global.startApp = function(container) {
                 var diamond = Math.floor(Math.random() * maxTotal)+1;
                 diamondArr.push('sq-'+ numberArr[diamond]);
                 numberArr.splice(diamond,1);
-
             }
 
-        console.log(diamondArr);
+       // console.log(diamondArr);
     }
 
     function flipSide(e) {
         var touched = e.target.id;
 
         if(diamondArr.indexOf(touched) != -1){
-
             document.getElementById(touched).classList.add('diamond');
             foundDiamonds.push(touched);
         }
         else{
             score = score-1;
-            document.getElementById('score').innerHTML = score;
+
         }
         document.getElementById(touched).classList.remove('unknown');
         document.getElementById(touched).removeEventListener('click',flipSide);
-        console.log(foundDiamonds.length);
+        //console.log(foundDiamonds.length);
         if(foundDiamonds.length == 8){
-            document.getElementById('message').innerHTML = "You've found all the diamonds!!"
+
+            //show score
+            document.getElementById('score').innerHTML = "Score: "+score;
+            document.getElementById('message').innerHTML = "You've found all the diamonds!!";
+
+            //Restrict clicks after game ends
+            var untouched = document.getElementsByClassName('unknown');
+            for(let i = 0; i < untouched.length; i++) {
+                untouched[i].removeEventListener('click', flipSide);
+            }
+
 
         }
-
     }
 
 
